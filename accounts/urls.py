@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import ProfileView,RegistrationView
+from .views import ProfileView,RegistrationView,ProfileEditView
 # from rest_framework import routers
 
 
@@ -11,5 +11,6 @@ from .views import ProfileView,RegistrationView
 urlpatterns = [
     path('registration/', RegistrationView.as_view()),
     path('profile/', ProfileView.as_view()),
+    path('profile/edit/',ProfileEditView.as_view()),
 
 ]
