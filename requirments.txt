@@ -1,0 +1,4 @@
+pillow
+drf
+jwt
+djoser
