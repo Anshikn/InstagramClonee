@@ -9,7 +9,7 @@ class RegistrationView(generics.CreateAPIView):
   queryset = User.objects.all()
   permission_classes = [AllowAny]
 
-class ProfileView(generics.RetrieveUpdateAPIView):
+class ProfileView(generics.RetrieveAPIView):
   serializer_class = ProfileSerializers
   permission_classes = [IsAuthenticated]
 

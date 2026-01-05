@@ -18,19 +18,23 @@ class RegisterationSerializers(serializers.ModelSerializer):
     user.save()
     return user
 
+class ProfileEditUserSerializers(serializers.ModelSerializer):
+  username = serializers.CharField(required=False, allow_blank=True)
+  class Meta:
+    model = User
+    fields = ['username']
+
 class ProfileSerializers(serializers.ModelSerializer):
 
   bio = serializers.CharField(required=False, allow_blank=True)
   profile_image = serializers.ImageField(required=False, allow_null=True)
+  user_name = ProfileEditUserSerializers( source='user',
+        required=False)
 
   class Meta:
     model = Profile
-    fields = ['bio','profile_image']    
+    fields = ['bio','profile_image','first_name','user_name','url']    
 
-class ProfileEditUserSerializers(serializers.ModelSerializer):
-  class Meta:
-    model = User
-    fields = ['username']
 
 class ProfileEditSerializers(serializers.ModelSerializer):
 
@@ -42,7 +46,7 @@ class ProfileEditSerializers(serializers.ModelSerializer):
 
   class Meta:
     model = Profile
-    fields = ['bio','profile_image','user_name']
+    fields = ['user_name','first_name','last_name','bio','profile_image','url']
 
   #updating profile user 
   def update(self, instance, validated_data):
