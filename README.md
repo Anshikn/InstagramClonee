@@ -1,1 +1,2 @@
-*Making Instagram Clone 
+# Making Instagram Clone 
+*Creating clone using django + react*
