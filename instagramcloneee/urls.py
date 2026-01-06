@@ -25,6 +25,8 @@ urlpatterns = [
     path('post/',include('posts.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path('likes/', include('likes.urls')),
+
     
 ]
 if settings.DEBUG:
