@@ -1,1 +1,1 @@
-#Making Instagram Clone 
+*Making Instagram Clone 
