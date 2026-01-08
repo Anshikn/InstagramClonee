@@ -27,6 +27,8 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('likes/', include('likes.urls')),
     path('comments/', include('comments.urls')),
+    path('follows/', include('follow_unfollow.urls')),
+
 
 
     
