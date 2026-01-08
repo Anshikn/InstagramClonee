@@ -3,8 +3,6 @@ from django.conf import settings
 from posts.models import Post
 
 # Create your models here.
-
-
 class Like(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   posts = models.ForeignKey(Post, on_delete=models.CASCADE,related_name='likes')

@@ -5,6 +5,7 @@ from .models import Post
 class PostSerializers(serializers.ModelSerializer):
   likes_count = serializers.SerializerMethodField()
   is_liked = serializers.SerializerMethodField()
+  comments_count = serializers.SerializerMethodField()
 
   # user = serializers.ReadOnlyField(source='user.id')
   class Meta:
@@ -20,3 +21,6 @@ class PostSerializers(serializers.ModelSerializer):
     if user.is_anonymous:
       return False
     return obj.likes.filter(user=user).exists()
+  
+  def get_comments_count(self, obj):
+        return obj.comments.count()
