@@ -1,0 +1,142 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+}
+
+/* COLORS */
+:root {
+    --bg-color: #fafafa;
+    --border-color: #dbdbdb;
+    --primary-color: #0095f6;
+    --text-color: #262626;
+    --muted-text: #8e8e8e;
+    --white: #ffffff;
+}
+
+/* BODY */
+body {
+    background-color: var(--bg-color);
+    /* background-color: #0095f6; */
+    color: var(--text-color);
+}
+
+/* NAVBAR */
+.navbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 0;
+}
+
+.nav-container {
+    max-width: 935px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.nav-links a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+/* MAIN CONTAINER */
+.main-container {
+    max-width: 935px;
+    margin: 40px auto;
+}
+
+/* CARD (Login / Register / Edit Profile) */
+.card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    max-width: 350px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.card h2 {
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* FORMS */
+form {
+    width: 100%;
+}
+
+form p {
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    border-radius: 3px;
+}
+
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* PROFILE PAGE */
+.profile-header {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+}
+
+.profile-info h2 {
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.profile-info p {
+    margin-top: 8px;
+}
+
+/* LINKS */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* SMALL TEXT */
+.small-text {
+    color: var(--muted-text);
+    font-size: 13px;
+}
