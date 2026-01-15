@@ -1,0 +1,33 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="profile-header">
+        <div class="profile-info">
+<h2>{{ profile.user.username }}</h2>
+</div>
+
+  <div class="profile-image"></div>
+{% if profile.profile_image %}
+
+    <img src="{{ profile.profile_image.url }}" alt="Profile image" width="150">
+{% endif %}
+</div>
+<div class="profile-info">
+<p><strong>First name:</strong> {{ profile.first_name }}</p>
+<p><strong>Last name:</strong> {{ profile.last_name }}</p>
+<p><strong>Bio:</strong> {{ profile.bio }}</p>
+
+{% if profile.url %}
+    <p>
+        <a href="{{ profile.url }}" target="_blank">
+            {{ profile.url }}
+        </a>
+    </p>
+{% endif %}
+
+<a href="{% url 'edit_profile' %}">Edit Profile</a>
+</div>
+</div>
+{% endblock %}

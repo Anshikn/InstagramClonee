@@ -2,3 +2,4 @@ pillow
 drf
 jwt
 djoser
+python-decouple
