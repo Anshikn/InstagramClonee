@@ -1,51 +1,61 @@
-from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
-from rest_framework import generics
-from .serializers import PostSerializers, FeedPostSerializer
+# posts/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Post
-from .permissions import IsAuthorOrReadOnly
-from rest_framework.generics import ListAPIView
-from rest_framework.permissions import IsAuthenticated
+from .forms import PostCreateForm
 from follow_unfollow.models import Follow
 from django.db.models import Q
 
-# Create your views here.
+@login_required
+def create_post_view(request):
+    if request.method == 'POST':
+        form = PostCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('feed')
+    else:
+        form = PostCreateForm()
 
-# class PostView(generics.ListAPIView):
-#   queryset = Post.objects.all().order_by('-created_at')
-#   serializer_class = PostSerializers
+    return render(request, 'posts/create_post.html', {'form': form})
 
-# class PostCreateView(generics.CreateAPIView):
-#   queryset = Post.objects.all() 
-#   serializer_class = PostSerializers
+# @login_required
+# def feed_view(request):
+#     user = request.user
 
-#   def perform_create(self, serializer):
-#       serializer.save(user=self.request.user)
+#     following_ids = Follow.objects.filter(
+#         follower=user
+#     ).values_list('following_id', flat=True)
 
+#     posts = Post.objects.filter(
+#         Q(user__id__in=following_ids) | Q(user=user)
+#     ).select_related('user').order_by('-created_at')
 
-class PostViewSet(ModelViewSet):
-  queryset = Post.objects.all().order_by('-created_at')
-  serializer_class = PostSerializers
-  permission_classes = [IsAuthorOrReadOnly]
-  
-  # def get_queryset(self):
-  #       return Post.objects.all().order_by('-created_at')
+#     return render(request, 'posts/feed.html', {'posts': posts})
 
-  def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+@login_required
+def feed_view(request):
+    following_ids = Follow.objects.filter(
+        follower=request.user
+    ).values_list('following_id', flat=True)
 
+    posts = Post.objects.filter(
+        Q(user__id__in=following_ids) | Q(user=request.user)
+    ).select_related('user').prefetch_related('likes', 'comments').order_by('-created_at')
 
-class FeedView(ListAPIView):
-    serializer_class = FeedPostSerializer
-    permission_classes = [IsAuthenticated]
+    return render(request, 'posts/feed.html', {'posts': posts})
 
-    def get_queryset(self):
-        user = self.request.user
+@login_required
+def user_posts_view(request, username):
+    posts = Post.objects.filter(
+        user__username=username
+    ).order_by('-created_at')
 
-        following_ids = Follow.objects.filter(follower=user).values_list('following_id', flat=True)
-        return Post.objects.filter(
-            Q(user__id__in=following_ids) | Q(user=user)
-        ).select_related('user').order_by('-created_at')
+    return render(request, 'posts/user_posts.html', {'posts': posts})
 
-
-
+@login_required
+def delete_post_view(request, post_id):
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+    post.delete()
+    return redirect('profile')

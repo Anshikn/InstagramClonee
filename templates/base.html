@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Instagram Clone{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<!-- 🔝 GLOBAL NAVBAR -->
+<nav class="navbar">
+    <div class="nav-container">
+
+        <a href="{% url 'feed' %}" class="logo">Instagram</a>
+
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+                <a href="{% url 'feed' %}">Home</a>
+                <a href="{% url 'create-post' %}">Create</a>
+                <a href="{% url 'profile' %}">{{ user.username }}</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Sign up</a>
+            {% endif %}
+        </div>
+
+    </div>
+</nav>
+
+<!-- 🔽 PAGE CONTENT -->
+<main class="main-container">
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

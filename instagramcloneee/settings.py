@@ -172,3 +172,6 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
  
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'feed'
+LOGOUT_REDIRECT_URL = 'login'

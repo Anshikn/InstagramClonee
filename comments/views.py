@@ -1,28 +1,43 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+# comments/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Comment
-from .serializers import CommentSerializers
+from .forms import CommentForm
 from posts.models import Post
 
 
-class CommentCreateView(generics.CreateAPIView):
-  serializer_class = CommentSerializers
-  permission_classes = [IsAuthenticated]
+@login_required
+def add_comment_view(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
 
-  def perform_create(self, serializer):
-    post_id = self.kwargs['post_id']
-    post = Post.objects.get(id=post_id)
-    serializer.save(user=self.request.user, post=post)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.post = post
+            comment.save()
 
-class CommentListView(generics.ListAPIView):
-  serializer_class = CommentSerializers
+    return redirect(request.META.get('HTTP_REFERER', 'feed'))
 
-  def get_queryset(self):
-    post_id = self.kwargs['post_id']
-    return Comment.objects.filter(post_id=post_id).order_by('-created_at') 
+def comment_list_view(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = post.comments.all().order_by('-created_at')
 
-class DeleteCommentView(generics.DestroyAPIView):
-  permission_classes = [IsAuthenticated]
+    form = CommentForm() if request.user.is_authenticated else None
 
-  def get_queryset(self):
-    return Comment.objects.filter(user=self.request.user)
+    return render(
+        request,
+        'comments/comment_list.html',
+        {'post': post, 'comments': comments, 'form': form}
+    )
+
+@login_required
+def delete_comment_view(request, comment_id):
+    comment = get_object_or_404(
+        Comment,
+        id=comment_id,
+        user=request.user
+    )
+    comment.delete()
+    return redirect(request.META.get('HTTP_REFERER', 'feed'))
