@@ -1,0 +1,51 @@
+/* Base stylesheet that imports modular CSS */
+@import url('accounts.css');
+
+/* Global layout tweaks */
+.container {
+  max-width: 935px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.feed-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.post-card {
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.post-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.post-actions {
+  padding: 8px 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.post-caption {
+  padding: 0 12px 12px 12px;
+  color: #262626;
+}
+
+/* Simple responsive rules */
+@media (max-width: 800px) {
+  .feed-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-container, .main-container {
+    padding: 0 12px;
+  }
+}
