@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Discover People</h2>
+
+{% for user in users %}
+    <div class="user-row">
+        <strong>{{ user.username }}</strong>
+
+        <form method="post" action="{% url 'toggle-follow' user.id %}">
+            {% csrf_token %}
+            <button type="submit">
+                {% if user.id in following_ids %}
+                    Unfollow
+                {% else %}
+                    Follow
+                {% endif %}
+            </button>
+        </form>
+    </div>
+{% empty %}
+    <p>No users found.</p>
+{% endfor %}
+
+{% endblock %}

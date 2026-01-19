@@ -6,5 +6,5 @@ urlpatterns = [
     #api
     path('api/<int:user_id>/toggle/', FollowToggleView.as_view(), name='follow-toggle'),
     #template
-    path('toggle/<int:user_id>/', follow_toggle_view, name='follow-toggle'),
+    path('toggle/<int:user_id>/', follow_toggle_view, name='toggle-follow'),
 ]

@@ -23,6 +23,7 @@
 
         <p>
             <strong>{{ profile.user.posts.count }}</strong> posts
+            
             <strong>{{ profile.user.followers.count }}</strong> followers
             <strong>{{ profile.user.following.count }}</strong> following
         </p>
@@ -36,7 +37,7 @@
 
         <br><br>
 
-        {% if user != profile.user %}
+        <!-- {% if user != profile.user %}
             <form method="post" action="{% url 'follow-toggle' profile.user.id %}">
                 {% csrf_token %}
                 {% if user in profile.user.followers.all %}
@@ -48,7 +49,23 @@
         {% else %}
             <a href="{% url 'edit_profile' %}">Edit Profile</a>
         {% endif %}
-    </div>
+    </div> -->
+    {% if user != profile.user %}
+    <form method="post" action="{% url 'toggle-follow' profile.user.id %}">
+        {% csrf_token %}
+        <button type="submit">
+            {% if is_following %}
+                Unfollow
+            {% else %}
+                Follow
+            {% endif %}
+        </button>
+    </form>
+{% else %}
+    <a href="{% url 'edit_profile' %}">Edit Profile</a>
+{% endif %}
+
 
 </div>
 {% endblock %}
+ 
