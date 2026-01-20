@@ -6,6 +6,21 @@
     <title>{% block title %}Instagram Clone{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_css %}{% endblock %}
+    <style>
+    /* Messages UI (simple, local to base) */
+    .msg-icon { cursor: pointer; margin: 0 8px; position: relative; }
+    .dm-dropdown { position: absolute; right: 0; top: 36px; background:#fff; border:1px solid #ddd; width:220px; box-shadow:0 4px 12px rgba(0,0,0,.08); display:none; z-index:60; }
+    .dm-dropdown ul { list-style:none; margin:0; padding:8px; }
+    .dm-dropdown li { padding:8px; border-bottom:1px solid #f1f1f1; cursor:pointer; }
+    .dm-dropdown li:last-child{ border-bottom:none }
+    .dm-panel { position:fixed; right:20px; top:80px; width:320px; height:420px; background:#fff; border:1px solid #ddd; box-shadow:0 8px 24px rgba(0,0,0,.12); display:none; z-index:70; }
+    .dm-panel .header { padding:12px; border-bottom:1px solid #eee; font-weight:600 }
+    .dm-panel .messages { padding:12px; height:330px; overflow:auto; }
+    .dm-panel .messages .msg { margin-bottom:10px; }
+    .dm-panel .composer { padding:8px; border-top:1px solid #eee }
+    .dm-panel .composer input{ width:100%; padding:8px }
+    @media (max-width:600px){ .dm-panel{ right:10px; left:10px; width:auto } }
+    </style>
 </head>
 <body>
 
@@ -20,6 +35,15 @@
                 <!-- <a href="{% url 'feed' %}">Home</a> -->
                 <a href="{% url 'users-list' %}">Explore</a>
                 <a href="{% url 'create-post' %}">Create</a>
+                <span class="msg-icon" id="msgToggle" title="Direct Messages">💬</span>
+                <div class="dm-dropdown" id="dmDropdown" aria-hidden="true">
+                    <ul>
+                        <li data-user="shinchan">shinchan</li>
+                        <li data-user="lufy">lufy</li>
+                        <li data-user="naruto">naruto</li>
+                        <li data-user="sakura">sakura</li>
+                    </ul>
+                </div>
                 <a href="{% url 'profile' %}">{{ user.username }}</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -36,6 +60,47 @@
 <main class="main-container">
     {% block content %}{% endblock %}
 </main>
+
+<!-- DM PANEL (shows simple message feed when a name is clicked) -->
+<div class="dm-panel" id="dmPanel" aria-hidden="true">
+    <div class="header" id="dmHeader">Conversation</div>
+    <div class="messages" id="dmMessages">
+        <div class="msg"><strong>shinchan</strong>: Hey — this is a sample DM.</div>
+        <div class="msg"><strong>you</strong>: Hi! Nice to see you.</div>
+    </div>
+    <div class="composer"><input placeholder="Write a message..." readonly></div>
+</div>
+
+<script>
+// Simple client-side UI toggles (no backend behavior)
+document.addEventListener('click', function(e){
+    var dmToggle = document.getElementById('msgToggle');
+    var dmDropdown = document.getElementById('dmDropdown');
+    var dmPanel = document.getElementById('dmPanel');
+    // toggle dropdown when icon clicked
+    if(e.target === dmToggle){
+        var showing = dmDropdown.style.display === 'block';
+        dmDropdown.style.display = showing ? 'none' : 'block';
+        return;
+    }
+    // clicking a name opens conversation
+    if(e.target && e.target.parentNode && e.target.parentNode.parentNode === dmDropdown){
+        var username = e.target.getAttribute('data-user');
+        document.getElementById('dmHeader').textContent = username;
+        // populate some placeholder messages for demo
+        var messages = document.getElementById('dmMessages');
+        messages.innerHTML = '<div class="msg"><strong>'+username+'</strong>: Hello from '+username+'</div>' +
+                             '<div class="msg"><strong>you</strong>: Hey '+username+', this is a demo.</div>';
+        dmPanel.style.display = 'block';
+        dmDropdown.style.display = 'none';
+        return;
+    }
+    // click outside dropdown closes it
+    if(dmDropdown && !dmDropdown.contains(e.target) && e.target !== dmToggle){ dmDropdown.style.display='none'; }
+    // clicking outside panel closes it
+    if(dmPanel && !dmPanel.contains(e.target)){ /* keep open for convenience */ }
+});
+</script>
 
 </body>
 </html>
