@@ -22,23 +22,33 @@ def register_view(request):
     return render(request, 'accounts/register.html', {'form': form})
 
 
-@login_required
-# def profile_view(request):
-#     profile, created = Profile.objects.get_or_create(user=request.user)
-#     return render(request, 'accounts/profile.html', {'profile': profile})
-def profile_view(request):
-    profile, _ = Profile.objects.get_or_create(user=request.user)
+def profile_view(request, username=None):
+    # If a username is provided, show that user's profile; otherwise show
+    # the logged-in user's profile (if authenticated).
+    if username:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return redirect('users-list')
+        profile, _ = Profile.objects.get_or_create(user=user)
+    else:
+        if not request.user.is_authenticated:
+            return redirect('login')
+        profile, _ = Profile.objects.get_or_create(user=request.user)
 
     is_following = False
-    if request.user != profile.user:
+    if request.user.is_authenticated and request.user != profile.user:
         is_following = Follow.objects.filter(
             follower=request.user,
             following=profile.user
         ).exists()
 
+    is_owner = request.user.is_authenticated and request.user == profile.user
+
     return render(request, 'accounts/profile.html', {
         'profile': profile,
-        'is_following': is_following
+        'is_following': is_following,
+        'is_owner': is_owner,
     })
 
 @login_required

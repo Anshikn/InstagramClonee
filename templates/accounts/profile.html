@@ -37,20 +37,9 @@
 
         <br><br>
 
-        <!-- {% if user != profile.user %}
-            <form method="post" action="{% url 'follow-toggle' profile.user.id %}">
-                {% csrf_token %}
-                {% if user in profile.user.followers.all %}
-                    <button type="submit">Unfollow</button>
-                {% else %}
-                    <button type="submit">Follow</button>
-                {% endif %}
-            </form>
-        {% else %}
-            <a href="{% url 'edit_profile' %}">Edit Profile</a>
-        {% endif %}
-    </div> -->
-    {% if user != profile.user %}
+        <!-- legacy block left for reference -->
+    </div>
+    {% if not is_owner %}
     <form method="post" action="{% url 'toggle-follow' profile.user.id %}">
         {% csrf_token %}
         <button type="submit">

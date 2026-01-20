@@ -1,11 +1,17 @@
+{% load static %}
+
 <div class="post-card">
 
     <!-- Post Header -->
     <div class="post-header">
-        <img class="profile-img"
-             src="{{ post.user.profile.profile_image.url }}"
-             alt="profile">
-        <strong>{{ post.user.username }}</strong>
+        <a href="{% url 'profile_detail' post.user.username %}">
+            <img class="profile-img"
+                 src="{% if post.user.profile.profile_image %}{{ post.user.profile.profile_image.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}"
+                 alt="profile">
+        </a>
+        <strong>
+            <a href="{% url 'profile_detail' post.user.username %}">{{ post.user.username }}</a>
+        </strong>
     </div>
 
     <!-- Post Image -->
@@ -29,7 +35,7 @@
 
     <!-- Caption -->
     <div class="post-caption">
-        <strong>{{ post.user.username }}</strong>
+        <strong><a href="{% url 'profile_detail' post.user.username %}">{{ post.user.username }}</a></strong>
         {{ post.caption }}
     </div>
 
